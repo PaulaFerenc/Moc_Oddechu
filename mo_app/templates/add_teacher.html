@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Nauczyciele</h2>
+<ul>
+    {% for t in teachers %}
+    <li><b>{{ t.name}} {{ t.surname }}</b> tel.: {{t.phone}} </br>e-mail: <a href="mailto:{{t.email}}">{{t.email}}</a> </br></br></li>
+    {% endfor %}
+</ul>
+<h2>Dodaj nowego nauczyciela</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Dodaj">
+    </form>
+
+{% endblock %}
