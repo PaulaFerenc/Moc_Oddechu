@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import PasswordInput
 
-from .models import Teacher, Workout, Client, Presence, Membership, WEEKDAYS
+from .models import Teacher, Workout, Client, Membership, WEEKDAYS
 
 
 class AddTeacherForm(forms.Form):

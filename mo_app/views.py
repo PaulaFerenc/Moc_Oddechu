@@ -1,5 +1,5 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 
 from .models import Teacher, Workout, WEEKDAYS
@@ -46,11 +46,13 @@ class AddWorkoutView(View):
             teacher = form.cleaned_data['teacher']
             new_workout = Workout.objects.create(name=name, day=day, time=time, date=date,
                                                  teacher=teacher)
-            str_day = WEEKDAYS[int(day) - 1][1]
-            return HttpResponse(
-                f'Dodano trening: {new_workout.name}, {str_day}, {new_workout.time}, {new_workout.date}, {new_workout.teacher}')
+            # str_day = WEEKDAYS[int(day) - 1][1]
+            # return HttpResponse(
+            #     f'Dodano trening: {new_workout.name}, {new_workout.day}, {new_workout.time}, {new_workout.date}, {new_workout.teacher}')
+            return redirect(f'/')
         else:
             return render(request, 'add_workout.html', {"form": form})
+
 
 class DelTeacherView(View):
     def get(self, request):
@@ -69,3 +71,29 @@ class DelTeacherView(View):
             return render(request, 'del_teacher.html', {"form": form})
 
 
+class WorkoutsListView(View):
+    def get(self, request):
+        results = Workout.objects.all()
+        return render(request, 'workouts_list.html', {'results': results})
+
+
+class WorkoutView(View):
+    def get(self, request, workout_id):
+        workout = Workout.objects.get(id=workout_id)
+        # workout = get_object_or_404(Workout, pk=workout_id)
+        return render(request, 'workout.html', {'workout': workout})
+
+
+class DelWorkoutView(View):
+    def get(self, request, workout_id):
+        del_workout = Workout.objects.get(id=workout_id)
+        return render(request, 'del_workout.html', {"del_workout": del_workout})
+
+    def post(self, request, workout_id):
+        Workout.objects.get(id=workout_id).delete()
+        return redirect(f'/')
+
+
+
+class EnrolClientView(View):
+    def get(self, request, workout_id):

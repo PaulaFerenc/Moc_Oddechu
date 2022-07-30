@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Usuń zajęcia</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ del_workout }}
+        <input type="submit" value="Usuń">
+        <input type="button" onclick="location.href='/';" value="Anuluj"/>
+    </form>
+
+{% endblock %}

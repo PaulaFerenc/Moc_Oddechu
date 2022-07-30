@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Zajęcia</h2>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ workout }}
+    <input type="button" onclick="location.href='/del_workout/{{workout.id}}/';" value="Usuń zajęcia"/>
+    <input type="submit" value="Zapisz uczestnika">
+</form>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+    {% for result in results %}
+    <li><a href="/workout/{{ result.pk }}/">{{ result.name }} {{ result.day }} {{ result.time }} {{ result.date }}
+        {{ result.teacher }} {{ result.pk }}</a></li>
+    {% endfor %}
+</ul>
+<input type="button" onclick="location.href='/add_workout/';" value="Dodaj nowe zajęcia"/>
+{% endblock %}
