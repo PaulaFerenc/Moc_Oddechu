@@ -34,30 +34,36 @@ class Teacher(models.Model):
         return f'{self.name} {self.surname}'
 
 
+class Client(models.Model):
+    name = models.CharField(max_length=64, verbose_name='Imię')
+    surname = models.CharField(max_length=64, verbose_name='Nazwisko')
+    email = models.EmailField(verbose_name='e-mail')
+    phone = models.IntegerField()
+
+    # workout = models.ManyToManyField(Workout)
+
+    def __str__(self):
+        return f'{self.name} {self.surname}'
+
+
 class Workout(models.Model):
     name = models.CharField(max_length=64, verbose_name='Rodzaj zajęć')
     day = models.CharField(max_length=32, choices=WEEKDAYS)
     time = models.TimeField(verbose_name='Godzina')
     date = models.DateField(verbose_name='Data')
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name='Nauczyciel')
-    # client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Uczestnik')
+    clients = models.ManyToManyField(Client, verbose_name='Uczestnik', through='Presence')
 
     def __str__(self):
         return f'{self.name} {self.day} {self.time} {self.date} {self.teacher}'
 
 
-class Client(models.Model):
-    name = models.CharField(max_length=64, verbose_name='Imię')
-    surname = models.CharField(max_length=64, verbose_name='Nazwisko')
-    email = models.EmailField(verbose_name='e-mail')
-    phone = models.IntegerField()
-    workout = models.ManyToManyField(Workout)
+class Presence(models.Model):
+    workout = models.ForeignKey(Workout, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
-
-# class Presence(models.Model):
-#     workout = models.ForeignKey(Workout, on_delete=models.CASCADE)
-#     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-#     # presence = through
+    def __str__(self):
+        return f'{self.workout} {self.client}'
 
 
 class Membership(models.Model):

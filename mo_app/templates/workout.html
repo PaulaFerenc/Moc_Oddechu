@@ -5,7 +5,19 @@
 <form action="" method="POST">
     {% csrf_token %}
     {{ workout }}
-    <input type="button" onclick="location.href='/del_workout/{{workout.id}}/';" value="Usuń zajęcia"/>
-    <input type="submit" value="Zapisz uczestnika">
+    <ul class="list-group">
+        {% for client in clients %}
+        <li class="list-group-item">{{ client.name }} {{ client.surname }}
+            <button type="submit" name="id" value="{{client.pk}}" class="btn btn-danger"/>
+            Usuń zapis</button>
+        </li>
+        {% empty %}
+        <li>Brak zapisów na te zajęcia</li>
+        {% endfor %}
+    </ul>
+    <input type="button" onclick="location.href='/del_workout/{{workout.id}}/';" value="Usuń zajęcia"
+           class="btn btn-primary"/>
+    <input type="button" onclick="location.href='/enrol_client/{{workout.id}}/';" value="Zapisz uczestnika"
+           class="btn btn-primary"/>
 </form>
 {% endblock %}

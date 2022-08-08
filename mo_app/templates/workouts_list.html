@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<ul>
+<ul class="list-group">
     {% for result in results %}
-    <li><a href="/workout/{{ result.pk }}/">{{ result.name }} {{ result.day }} {{ result.time }} {{ result.date }}
+    <li class="list-group-item"><a href="/workout/{{ result.pk }}/">{{ result.name }} {{ result.day }} {{ result.time }} {{ result.date }}
         {{ result.teacher }} {{ result.pk }}</a></li>
     {% endfor %}
 </ul>
-<input type="button" onclick="location.href='/add_workout/';" value="Dodaj nowe zajęcia"/>
+<input type="button" onclick="location.href='/add_workout/';" value="Dodaj nowe zajęcia" class="btn btn-primary"/>
+<input type="button" onclick="location.href='/add_client/';" value="Dodaj nowego klienta" class="btn btn-primary"/>
 {% endblock %}

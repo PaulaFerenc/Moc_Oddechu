@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+<h2>Zapisz uczestnika na zajęcia</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Zapisz" />
+        <input type="button" onclick="location.href='/';" value="Wróć do listy zajęć" />
+    </form>
+
+{% endblock %}

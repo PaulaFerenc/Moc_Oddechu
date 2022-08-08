@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from mo_app.views import HiView, AddTeacherView, AddWorkoutView, DelTeacherView, WorkoutsListView, WorkoutView, \
-    DelWorkoutView
+    DelWorkoutView, AddClientView, ClientsListView, EnrolClientView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +27,7 @@ urlpatterns = [
     path('', WorkoutsListView.as_view()),
     path('workout/<int:workout_id>/', WorkoutView.as_view()),
     path('del_workout/<int:workout_id>/', DelWorkoutView.as_view()),
+    path('add_client/', AddClientView.as_view()),
+    path('clients_list/', ClientsListView.as_view()),
+    path('enrol_client/<int:workout_id>/', EnrolClientView.as_view()),
 ]
