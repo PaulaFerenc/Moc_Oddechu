@@ -3,7 +3,7 @@
 {% block content %}
 <ul>
     {% for result in results %}
-    <li><a href="/client_list/{{ result.pk }}/">{{ result.name }} {{ result.surname }}
+    <li><a href="/client/{{ result.pk }}/">{{ result.name }} {{ result.surname }}
         {{ result.client }} {{ result.pk }}</a></li>
     {% endfor %}
 </ul>

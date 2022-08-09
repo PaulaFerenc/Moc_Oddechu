@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import PasswordInput
 
-from .models import Teacher, Workout, Client, Membership, WEEKDAYS
+from .models import Teacher, Workout, Client, Membership, WEEKDAYS, MEMBERSHIPS
 
 
 class AddTeacherForm(forms.Form):
@@ -34,3 +34,8 @@ class AddClientForm(forms.Form):
 
 class EnrolClientForm(forms.Form):
     client = forms.ModelChoiceField(label="Klient", queryset=Client.objects.all())
+
+
+class AddMembershipForm(forms.Form):
+    type = forms.ChoiceField(label="Rodzaj", choices=MEMBERSHIPS)
+    start = forms.DateField(label="Data rozpoczęcia")

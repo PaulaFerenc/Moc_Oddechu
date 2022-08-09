@@ -15,12 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from mo_app.views import HiView, AddTeacherView, AddWorkoutView, DelTeacherView, WorkoutsListView, WorkoutView, \
-    DelWorkoutView, AddClientView, ClientsListView, EnrolClientView
+from mo_app.views import AddTeacherView, AddWorkoutView, DelTeacherView, WorkoutsListView, WorkoutView, \
+    DelWorkoutView, AddClientView, ClientsListView, EnrolClientView, ClientView, AddMembershipView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hi/<str:name>/', HiView.as_view()),
     path('add_teacher/', AddTeacherView.as_view()),
     path('add_workout/', AddWorkoutView.as_view()),
     path('del_teacher/', DelTeacherView.as_view()),
@@ -30,4 +29,6 @@ urlpatterns = [
     path('add_client/', AddClientView.as_view()),
     path('clients_list/', ClientsListView.as_view()),
     path('enrol_client/<int:workout_id>/', EnrolClientView.as_view()),
+    path('client/<int:client_id>/', ClientView.as_view()),
+    path('add_membership/<int:client_id>/', AddMembershipView.as_view()),
 ]

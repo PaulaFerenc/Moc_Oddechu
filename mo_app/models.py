@@ -11,14 +11,14 @@ WEEKDAYS = (
 )
 
 MEMBERSHIPS = (
-    (1, 'pojedyncze wejście'),
-    (2, '4 wybór'),
-    (3, '4 otwarty'),
-    (4, '8 wybór'),
-    (5, '8 otwarty'),
-    (6, '12 wybór'),
-    (7, '12 otwarty'),
-    (8, 'open'),
+    ('pojedyncze wejście', 'pojedyncze wejście'),
+    ('4 wybór', '4 wybór'),
+    ('4 otwarty', '4 otwarty'),
+    ('8 wybór', '8 wybór'),
+    ('8 otwarty', '8 otwarty'),
+    ('12 wybór', '12 wybór'),
+    ('12 otwarty', '12 otwarty'),
+    ('open', 'open'),
 )
 
 
@@ -67,6 +67,11 @@ class Presence(models.Model):
 
 
 class Membership(models.Model):
-    type = models.IntegerField(choices=MEMBERSHIPS, verbose_name='Rodzaj')
+    type = models.CharField(max_length=64, choices=MEMBERSHIPS, verbose_name='Rodzaj')
     start = models.DateTimeField(verbose_name='Ważny od')
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.type} {self.start}'
+
+

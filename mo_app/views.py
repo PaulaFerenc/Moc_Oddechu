@@ -1,14 +1,13 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
+from datetime import datetime
+from datetime import timedelta
+from django.utils import timezone
 
-from .models import Teacher, Workout, WEEKDAYS, Client, Presence
-from .forms import AddTeacherForm, AddWorkoutForm, DelTeacherForm, AddClientForm, EnrolClientForm
 
-
-class HiView(View):
-    def get(self, request, name):
-        return HttpResponse(f'Hello {name}!')
+from .models import Teacher, Workout, WEEKDAYS, Client, Presence, Membership
+from .forms import AddTeacherForm, AddWorkoutForm, DelTeacherForm, AddClientForm, EnrolClientForm, AddMembershipForm
 
 
 class AddTeacherView(View):
@@ -92,7 +91,6 @@ class WorkoutView(View):
         return redirect(f'/workout/{workout_id}')
 
 
-
 class DelWorkoutView(View):
     def get(self, request, workout_id):
         del_workout = Workout.objects.get(id=workout_id)
@@ -117,7 +115,8 @@ class AddClientView(View):
             phone = form.cleaned_data['phone']
             new_client = Client.objects.create(name=name, surname=surname, email=email,
                                                phone=phone)
-            return HttpResponse(f'Dodano klienta {new_client}')
+            # return HttpResponse(f'Dodano klienta {new_client}')
+            return redirect(f'/')
         else:
             return render(request, 'add_client.html', {"form": form})
 
@@ -136,10 +135,6 @@ class EnrolClientView(View):
     def post(self, request, workout_id):
         form = EnrolClientForm(request.POST)
         if form.is_valid():
-            # name = form.cleaned_data['name']
-            # surname = form.cleaned_data['surname']
-            # Client.objects.create(name=name, surname=surname, workout=workout_id)
-            # workout = form.cleaned_data['workout_id']
             client = form.cleaned_data['client']
             workout = Workout.objects.get(id=workout_id)
             if not Presence.objects.filter(workout=workout, client=client):
@@ -149,3 +144,41 @@ class EnrolClientView(View):
                 return HttpResponse(f"Uczestnik już zapisany <a href='/'>OK</a>")
         else:
             return render(request, 'enrol_client.html', {"form": form})
+
+
+class ClientView(View):
+    def get(self, request, client_id):
+        client = Client.objects.get(id=client_id)
+        membership = Membership.objects.filter(client=client)
+        #
+        # for result in membership:
+        #     beg = result.start
+        #     end = beg + timedelta(days=30)
+        #     if end <= timezone.now():
+        #         validation = result
+        #     else:
+        #         validation = f'Brak ważnych karnetów'
+        return render(request, 'client.html', {'client': client, 'membership': membership})
+
+        # start = membership.start.date()
+        # start = request.GET.get['start']
+        # start = datetime.strptime(start_str, "%Y-%m-%d")
+        # end = start + timedelta(days=30)
+
+
+class AddMembershipView(View):
+    def get(self, request, client_id):
+        form = AddMembershipForm()
+        client = Client.objects.get(id=client_id)
+        return render(request, 'add_membership.html', {'form': form, 'client': client})
+
+    def post(self, request, client_id):
+        form = AddMembershipForm(request.POST)
+        if form.is_valid():
+            type = form.cleaned_data['type']
+            start = form.cleaned_data['start']
+            client = Client.objects.get(id=client_id)
+            Membership.objects.create(type=type, start=start, client=client)
+            return redirect(f'/client/{client_id}/')
+        else:
+            return render(request, 'add_membership.html', {"form": form})

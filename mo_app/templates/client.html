@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Dane klienta</h2>
+<form action="" method="POST">
+    {% csrf_token %}
+    <h3>{{ client }}</h3><br/>
+    e-mail: {{ client.email }}<br/>
+    tel.: {{ client.phone }}<br/>
+    Karnety: {{ validation }}
+    <ul>
+        {% if membership %}
+            {% for m in membership %}
+
+<!--            {% if date_created|date:"YmdHis" < now|date:"YmdHis" %}-->
+<!--            {% endif %}-->
+
+            <li>{{ m.type }} {{ m.start }} </li>
+            {% endfor %}
+        {% else %}
+            <li>Brak karnetu</li>
+        {% endif %}
+    </ul>
+    <input type="button" onclick="location.href='/add_membership/{{client.id}}/';" value="Dodaj karnet"
+           class="btn btn-primary"/>
+</form>
+{% endblock %}

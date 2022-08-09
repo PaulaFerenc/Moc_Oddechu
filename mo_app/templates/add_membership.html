@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Dodajesz karnet dla {{ client }}</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Dodaj">
+        <input type="button" onclick="location.href='/';" value="Wróć do listy zajęć"/>
+    </form>
+
+{% endblock %}
