@@ -1,16 +1,24 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.db.models import Count
+from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
+from django.urls import reverse
+from django.contrib.auth.models import User
 from datetime import datetime
 from datetime import timedelta
 from django.utils import timezone
 
-
 from .models import Teacher, Workout, WEEKDAYS, Client, Presence, Membership
-from .forms import AddTeacherForm, AddWorkoutForm, DelTeacherForm, AddClientForm, EnrolClientForm, AddMembershipForm
+from .forms import AddTeacherForm, AddWorkoutForm, DelTeacherForm, AddClientForm, EnrolClientForm, AddMembershipForm, \
+    LoginForm
 
 
-class AddTeacherView(View):
+class AddTeacherView(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request):
         form = AddTeacherForm()
         teachers = Teacher.objects.all()
@@ -30,7 +38,9 @@ class AddTeacherView(View):
             return render(request, 'add_teacher.html', {"form": form})
 
 
-class AddWorkoutView(View):
+class AddWorkoutView(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request):
         form = AddWorkoutForm()
         return render(request, 'add_workout.html', {"form": form})
@@ -46,14 +56,14 @@ class AddWorkoutView(View):
             new_workout = Workout.objects.create(name=name, day=day, time=time, date=date,
                                                  teacher=teacher)
             # str_day = WEEKDAYS[int(day) - 1][1]
-            # return HttpResponse(
-            #     f'Dodano trening: {new_workout.name}, {new_workout.day}, {new_workout.time}, {new_workout.date}, {new_workout.teacher}')
             return redirect(f'/')
         else:
             return render(request, 'add_workout.html', {"form": form})
 
 
-class DelTeacherView(View):
+class DelTeacherView(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request):
         form = DelTeacherForm()
         return render(request, 'del_teacher.html', {"form": form})
@@ -70,13 +80,18 @@ class DelTeacherView(View):
             return render(request, 'del_teacher.html', {"form": form})
 
 
-class WorkoutsListView(View):
+class WorkoutsListView(LoginRequiredMixin, View):
+    login_url = 'login'  # szuka po nazwie url'a (name=), a nie po danym url-u
+
     def get(self, request):
-        results = Workout.objects.all()
+        # results = Workout.objects.all()
+        results = Workout.objects.order_by('-date', '-time')
         return render(request, 'workouts_list.html', {'results': results})
 
 
-class WorkoutView(View):
+class WorkoutView(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request, workout_id):
         workout = Workout.objects.get(id=workout_id)
         clients = Client.objects.filter(workout=workout_id)
@@ -91,7 +106,9 @@ class WorkoutView(View):
         return redirect(f'/workout/{workout_id}')
 
 
-class DelWorkoutView(View):
+class DelWorkoutView(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request, workout_id):
         del_workout = Workout.objects.get(id=workout_id)
         return render(request, 'del_workout.html', {'del_workout': del_workout})
@@ -101,7 +118,9 @@ class DelWorkoutView(View):
         return redirect(f'/')
 
 
-class AddClientView(View):
+class AddClientView(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request):
         form = AddClientForm()
         return render(request, 'add_client.html', {'form': form})
@@ -121,13 +140,17 @@ class AddClientView(View):
             return render(request, 'add_client.html', {"form": form})
 
 
-class ClientsListView(View):
+class ClientsListView(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request):
         results = Client.objects.all()
         return render(request, 'clients_list.html', {'results': results})
 
 
-class EnrolClientView(View):
+class EnrolClientView(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request, workout_id):
         form = EnrolClientForm()
         return render(request, 'enrol_client.html', {'form': form, 'workout': workout_id})
@@ -146,19 +169,22 @@ class EnrolClientView(View):
             return render(request, 'enrol_client.html', {"form": form})
 
 
-class ClientView(View):
+class ClientView(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request, client_id):
         client = Client.objects.get(id=client_id)
         membership = Membership.objects.filter(client=client)
-        #
-        # for result in membership:
-        #     beg = result.start
-        #     end = beg + timedelta(days=30)
-        #     if end <= timezone.now():
-        #         validation = result
-        #     else:
-        #         validation = f'Brak ważnych karnetów'
-        return render(request, 'client.html', {'client': client, 'membership': membership})
+        validation = 'Brak karnetu'
+
+        if membership:
+            beg = membership.last().start
+            end = beg + timedelta(days=30)
+            if end >= timezone.now():
+                validation = f'aktywny karnet - ważny do  {end.date()}'
+            else:
+                validation = f'karnet wygasł - ważny do: {end.date()}'
+        return render(request, 'client.html', {'client': client, 'validation': validation})
 
         # start = membership.start.date()
         # start = request.GET.get['start']
@@ -166,7 +192,9 @@ class ClientView(View):
         # end = start + timedelta(days=30)
 
 
-class AddMembershipView(View):
+class AddMembershipView(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request, client_id):
         form = AddMembershipForm()
         client = Client.objects.get(id=client_id)
@@ -182,3 +210,30 @@ class AddMembershipView(View):
             return redirect(f'/client/{client_id}/')
         else:
             return render(request, 'add_membership.html', {"form": form})
+
+
+class LoginView(View):
+
+    def get(self, request):
+        form = LoginForm()
+        return render(request, 'login.html', {"form": form})
+
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(request,
+                                username=form.cleaned_data['username'],
+                                password=form.cleaned_data['password'])
+            if user is not None:
+                login(request, user)
+                return redirect(f'/')
+            else:
+                return HttpResponse('Nie udało się zalogować')
+        else:
+            return render(request, 'login.html', {"form": form})
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect(f'/')

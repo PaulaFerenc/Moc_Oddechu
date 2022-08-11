@@ -9,19 +9,19 @@
     e-mail: {{ client.email }}<br/>
     tel.: {{ client.phone }}<br/>
     Karnety: {{ validation }}
-    <ul>
-        {% if membership %}
-            {% for m in membership %}
+<!--    <ul>-->
+<!--        {% if membership %}-->
+<!--            {% for m in membership %}-->
 
-<!--            {% if date_created|date:"YmdHis" < now|date:"YmdHis" %}-->
-<!--            {% endif %}-->
+<!--&lt;!&ndash;            {% if date_created|date:"YmdHis" < now|date:"YmdHis" %}&ndash;&gt;-->
+<!--&lt;!&ndash;            {% endif %}&ndash;&gt;-->
 
-            <li>{{ m.type }} {{ m.start }} </li>
-            {% endfor %}
-        {% else %}
-            <li>Brak karnetu</li>
-        {% endif %}
-    </ul>
+<!--            <li>{{ m.type }} {{ m.start }} </li>-->
+<!--            {% endfor %}-->
+<!--        {% else %}-->
+<!--            <li>Brak karnetu</li>-->
+<!--        {% endif %}-->
+<!--    </ul>-->
     <input type="button" onclick="location.href='/add_membership/{{client.id}}/';" value="Dodaj karnet"
            class="btn btn-primary"/>
 </form>

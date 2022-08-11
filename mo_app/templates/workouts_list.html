@@ -3,8 +3,8 @@
 {% block content %}
 <ul class="list-group">
     {% for result in results %}
-    <li class="list-group-item"><a href="/workout/{{ result.pk }}/">{{ result.name }} {{ result.day }} {{ result.time }} {{ result.date }}
-        {{ result.teacher }} {{ result.pk }}</a></li>
+    <li class="list-group-item"><a href="/workout/{{ result.pk }}/">{{ result.name }} {{ result.day }} {{ result.time|date:'H:i' }} {{ result.date|date:'Y-m-d' }}
+        {{ result.teacher }} </a></li>
     {% endfor %}
 </ul>
 <input type="button" onclick="location.href='/add_workout/';" value="Dodaj nowe zajęcia" class="btn btn-primary"/>

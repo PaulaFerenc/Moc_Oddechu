@@ -13,11 +13,15 @@ class AddTeacherForm(forms.Form):
     phone = forms.CharField(label="Telefon")
 
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
 class AddWorkoutForm(forms.Form):
     name = forms.CharField(label="Rodzaj", max_length=64)
     day = forms.ChoiceField(label="Dzień", choices=WEEKDAYS)
     time = forms.TimeField(label="Godzina")
-    date = forms.DateField(label="Data")
+    date = forms.DateField(widget=DateInput)
     teacher = forms.ModelChoiceField(label="Nauczyciel", queryset=Teacher.objects.all())
 
 
@@ -38,4 +42,9 @@ class EnrolClientForm(forms.Form):
 
 class AddMembershipForm(forms.Form):
     type = forms.ChoiceField(label="Rodzaj", choices=MEMBERSHIPS)
-    start = forms.DateField(label="Data rozpoczęcia")
+    start = forms.DateField(widget=DateInput)
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=150)
+    password = forms.CharField(widget=forms.PasswordInput, max_length=50)
