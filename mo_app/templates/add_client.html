@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Dodajesz nowego klienta</h2>
+<h2 class="align-middle text-primary">Dodajesz nowego klienta</h2></div>
     <form action="" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Dodaj">
+        <input type="submit" value="Dodaj" class="btn btn-success">
+        <input type="button" onclick="location.href='/clients_list/';" value="Wróć do listy klientów" class="btn btn-outline-secondary"/>
     </form>
 
 {% endblock %}

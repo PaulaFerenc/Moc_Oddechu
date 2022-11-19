@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Dodajesz karnet dla {{ client }}</h2>
+<h2 class="align-middle text-primary">Dodajesz karnet dla {{ client }}</h2></div>
     <form action="" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Dodaj">
-        <input type="button" onclick="location.href='/';" value="Wróć do listy zajęć"/>
+        <input type="submit" value="Dodaj" class="btn btn-success">
+        <input type="button" onclick="location.href='/';" value="Wróć do listy zajęć" class="btn btn-outline-secondary"/>
     </form>
 
 {% endblock %}

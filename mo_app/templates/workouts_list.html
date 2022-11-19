@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<ul class="list-group">
+<h1 class="align-middle text-primary">Lista zajęć</h1></div>
+
+<div class="list-group mb-5">
     {% for result in results %}
-    <li class="list-group-item"><a href="/workout/{{ result.pk }}/">{{ result.name }} {{ result.day }} {{ result.time|date:'H:i' }} {{ result.date|date:'Y-m-d' }}
-        {{ result.teacher }} </a></li>
+    <a href="/workout/{{ result.pk }}/" class="list-group-item list-group-item-action"><span class="fw-bold text-primary">{{ result.name }}</span> {{ result.day }} {{ result.time|date:'H:i' }} {{ result.date|date:'Y-m-d' }}
+        {{ result.teacher }} </a>
     {% endfor %}
-</ul>
-<input type="button" onclick="location.href='/add_workout/';" value="Dodaj nowe zajęcia" class="btn btn-primary"/>
-<input type="button" onclick="location.href='/clients_list/';" value="Klienci" class="btn btn-primary"/>
+</div>
+<div class="position-relative d-flex align-items-center">
+    <input type="button" onclick="location.href='/add_workout/';" value="Dodaj nowe zajęcia" class="btn btn-success"/>
+    <div class="position-absolute end-0">
+        <input type="button" onclick="location.href='/clients_list/';" value="Klienci" class="btn btn-outline-secondary"/>
+        <input type="button" onclick="location.href='/add_teacher/';" value="Nauczyciele" class="btn btn-outline-secondary"/>
+    </div>
+</div>
 {% endblock %}

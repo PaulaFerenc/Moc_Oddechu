@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="align-middle text-primary">Edytujesz dane klienta {{client_id}}</h2></div>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Dodaj" class="btn btn-success">
+        <input type="button" onclick="location.href='/client/{{client_id}}/';" value="Wróć do listy klientów" class="btn btn-outline-secondary"/>
+    </form>
+
+{% endblock %}

@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from mo_app.views import AddTeacherView, AddWorkoutView, DelTeacherView, WorkoutsListView, WorkoutView, \
     DelWorkoutView, AddClientView, ClientsListView, EnrolClientView, ClientView, AddMembershipView, LoginView, \
-    LogoutView
+    LogoutView, DelClientView, EditClientView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,4 +34,6 @@ urlpatterns = [
     path('add_membership/<int:client_id>/', AddMembershipView.as_view()),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('del_client/<int:client_id>/', DelClientView.as_view()),
+    path('edit_client/<int:client_id>/', EditClientView.as_view()),
 ]

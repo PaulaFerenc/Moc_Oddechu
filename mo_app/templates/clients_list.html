@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<ul>
+<h1 class="align-middle text-primary">Lista klientów</h1></div>
+<div class="list-group mb-5">
     {% for result in results %}
-    <li><a href="/client/{{ result.pk }}/">{{ result.name }} {{ result.surname }}
-        {{ result.client }}</a></li>
+    <a href="/client/{{ result.pk }}/" class="list-group-item list-group-item-action">{{ result.name }} {{ result.surname }}
+        {{ result.client }}</a>
     {% endfor %}
-</ul>
+</div>
 <!--<input type="button" onclick="location.href='/add_workout/';" value="Dodaj nowe zajęcia"/>-->
-<input type="button" onclick="location.href='/add_client/';" value="Dodaj nowego klienta"/>
+<input type="button" onclick="location.href='/add_client/';" value="Dodaj nowego klienta" class="btn btn-success"/>
 {% endblock %}

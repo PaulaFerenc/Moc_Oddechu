@@ -48,3 +48,10 @@ class AddMembershipForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput, max_length=50)
+
+
+class EditClientForm(forms.Form):
+    name = forms.CharField(label="Imię", max_length=64)
+    surname = forms.CharField(label="Nazwisko", max_length=64)
+    email = forms.EmailField(label="Email")
+    phone = forms.CharField(label="Telefon")

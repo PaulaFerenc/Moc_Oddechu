@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Zapisz uczestnika na zajęcia</h2>
+<h2 class="align-middle text-primary">Zapisz na zajęcia</h2></div>
     <form action="" method="POST">
         {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Zapisz" />
-        <input type="button" onclick="location.href='/';" value="Wróć do listy zajęć" />
+        {{ form.as_p }}
+        <input type="submit" value="Zapisz" class="btn btn-success"/>
+        <input type="button" onclick="location.href='/';" value="Wróć do listy zajęć" class="btn btn-outline-secondary"/>
     </form>
 
 {% endblock %}

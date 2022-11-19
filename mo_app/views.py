@@ -13,7 +13,7 @@ from django.utils import timezone
 
 from .models import Teacher, Workout, WEEKDAYS, Client, Presence, Membership
 from .forms import AddTeacherForm, AddWorkoutForm, DelTeacherForm, AddClientForm, EnrolClientForm, AddMembershipForm, \
-    LoginForm
+    LoginForm, EditClientForm
 
 
 class AddTeacherView(LoginRequiredMixin, View):
@@ -33,7 +33,7 @@ class AddTeacherView(LoginRequiredMixin, View):
             phone = form.cleaned_data['phone']
             new_teacher = Teacher.objects.create(name=name, surname=surname, email=email,
                                                  phone=phone)
-            return HttpResponse(f'Dodano nauczyciela {new_teacher}')
+            return redirect(f'/add_teacher/')
         else:
             return render(request, 'add_teacher.html', {"form": form})
 
@@ -75,7 +75,7 @@ class DelTeacherView(LoginRequiredMixin, View):
             teacher_id = teacher.pk
             Teacher.objects.get(pk=teacher_id).delete()
 
-            return HttpResponse(f'Usunięto nauczyciela {teacher}')
+            return redirect(f'/add_teacher/')
         else:
             return render(request, 'del_teacher.html', {"form": form})
 
@@ -181,9 +181,9 @@ class ClientView(LoginRequiredMixin, View):
             beg = membership.last().start
             end = beg + timedelta(days=30)
             if end >= timezone.now():
-                validation = f'aktywny karnet - ważny do  {end.date()}'
+                validation = f'Aktywny karnet - ważny do  {end.date()}'
             else:
-                validation = f'karnet wygasł - ważny do: {end.date()}'
+                validation = f'Karnet wygasł - ważny do: {end.date()}'
         return render(request, 'client.html', {'client': client, 'validation': validation})
 
         # start = membership.start.date()
@@ -237,3 +237,37 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect(f'/')
+
+
+class DelClientView(LoginRequiredMixin, View):
+    login_url = 'login'
+
+    def get(self, request, client_id):
+        del_client = Client.objects.get(id=client_id)
+        return render(request, 'del_client.html', {'del_client': del_client})
+
+    def post(self, request, client_id):
+        Client.objects.get(id=client_id).delete()
+        return redirect(f'/clients_list/')
+
+
+class EditClientView(LoginRequiredMixin, View):
+    login_url = 'login'
+
+    def get(self, request, client_id):
+        form = EditClientForm()
+        client = Client.objects.get(id=client_id)
+        return render(request, 'edit_client.html', {'form': form, 'client': client})
+
+    # def post(self, request):
+    #     form = EditClientForm(request.POST)
+    #     if form.is_valid():
+    #         name = form.cleaned_data['name']
+    #         surname = form.cleaned_data['surname']
+    #         email = form.cleaned_data['email']
+    #         phone = form.cleaned_data['phone']
+    #         new_client = Client.objects.create(name=name, surname=surname, email=email,
+    #                                            phone=phone)
+    #         return redirect(f'/')
+    #     else:
+    #         return render(request, 'add_client.html', {"form": form})

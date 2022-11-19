@@ -1,23 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Zajęcia</h2>
+<h3 class="text-primary">{{ workout }}</h3></div>
 <form action="" method="POST">
     {% csrf_token %}
-    {{ workout }}
-    <ul class="list-group">
+    <ul class="list-group mb-5">
         {% for client in clients %}
-        <li class="list-group-item">{{ client.name }} {{ client.surname }}
-            <button type="submit" name="id" value="{{client.pk}}" class="btn btn-danger"/>
+        <li class="list-group-item p-2 align-items-center"><span
+                class="mr-6">{{ client.name }} {{ client.surname }}</span>
+            <button type="submit" name="id" value="{{client.pk}}" class="btn btn-sm btn-outline-danger"/>
             Usuń zapis</button>
         </li>
         {% empty %}
-        <li>Brak zapisów na te zajęcia</li>
+        <h3 class="text-secondary">Brak zapisów na te zajęcia</h3>
         {% endfor %}
     </ul>
-    <input type="button" onclick="location.href='/del_workout/{{workout.id}}/';" value="Usuń zajęcia"
-           class="btn btn-primary"/>
-    <input type="button" onclick="location.href='/enrol_client/{{workout.id}}/';" value="Zapisz uczestnika"
-           class="btn btn-primary"/>
+    <div class="position-relative">
+        <input type="button" onclick="location.href='/enrol_client/{{workout.id}}/';" value="Zapisz uczestnika"
+               class="btn btn-success"/>
+        <input type="button" onclick="location.href='/del_workout/{{workout.id}}/';" value="Usuń zajęcia"
+               class="btn btn-outline-danger position-absolute end-0"/>
+    </div>
+
 </form>
 {% endblock %}

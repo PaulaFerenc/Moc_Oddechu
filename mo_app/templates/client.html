@@ -2,27 +2,37 @@
 
 {% block content %}
 
-<h2>Dane klienta</h2>
+<h1 class="align-middle text-primary">Klient</h1></div>
 <form action="" method="POST">
     {% csrf_token %}
-    <h3>{{ client }}</h3><br/>
-    e-mail: {{ client.email }}<br/>
-    tel.: {{ client.phone }}<br/>
-    Karnety: {{ validation }}
-<!--    <ul>-->
-<!--        {% if membership %}-->
-<!--            {% for m in membership %}-->
+    <ul class="list-group list-group-flush mb-5">
+        <li class="list-group-item"><h3 class="text-primary">{{ client }}</h3></li>
+        <li class="list-group-item"><b>e-mail:</b> <a href="mailto: {{ client.email }}">{{ client.email }}</a></li>
+        <li class="list-group-item"><b>tel.:</b> {{ client.phone }}</li>
+        <li class="list-group-item">{{ validation }}</li>
+    </ul>
+    <!--    <ul>-->
+    <!--        {% if membership %}-->
+    <!--            {% for m in membership %}-->
 
-<!--&lt;!&ndash;            {% if date_created|date:"YmdHis" < now|date:"YmdHis" %}&ndash;&gt;-->
-<!--&lt;!&ndash;            {% endif %}&ndash;&gt;-->
+    <!--&lt;!&ndash;            {% if date_created|date:"YmdHis" < now|date:"YmdHis" %}&ndash;&gt;-->
+    <!--&lt;!&ndash;            {% endif %}&ndash;&gt;-->
 
-<!--            <li>{{ m.type }} {{ m.start }} </li>-->
-<!--            {% endfor %}-->
-<!--        {% else %}-->
-<!--            <li>Brak karnetu</li>-->
-<!--        {% endif %}-->
-<!--    </ul>-->
-    <input type="button" onclick="location.href='/add_membership/{{client.id}}/';" value="Dodaj karnet"
-           class="btn btn-primary"/>
+    <!--            <li>{{ m.type }} {{ m.start }} </li>-->
+    <!--            {% endfor %}-->
+    <!--        {% else %}-->
+    <!--            <li>Brak karnetu</li>-->
+    <!--        {% endif %}-->
+    <!--    </ul>-->
+    <div class="position-relative">
+        <input type="button" onclick="location.href='/add_membership/{{client.id}}/';" value="Dodaj karnet"
+               class="btn btn-success"/>
+        <input type="button" onclick="location.href='/clients_list/';" value="Wróć do listy klientów"
+               class="btn btn-outline-secondary"/>
+        <input type="button" onclick="location.href='/edit_client/{{client.id}}/';" value="Edytuj dane klienta"
+               class="btn btn-outline-secondary"/>
+        <input type="button" onclick="location.href='/del_client/{{client.id}}/';" value="Usuń klienta"
+               class="btn btn-outline-danger position-absolute end-0"/>
+    </div>
 </form>
 {% endblock %}
